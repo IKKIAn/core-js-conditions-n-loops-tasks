@@ -126,27 +126,31 @@ function isIsoscelesTriangle(a, b, c) {
 function convertToRomanNumerals(num) {
   let result = '';
 
-  let tens = (num / 10) | 0; 
-  let ones = num % 10;      
-  while (tens > 0) {
+  const tens = Math.floor(num / 10);
+  let ones = num % 10;
+
+  let t = tens;
+  while (t > 0) {
     result += 'X';
-    tens--;
+    t -= 1;
   }
+
   if (ones === 9) {
     result += 'IX';
   } else if (ones >= 5) {
     result += 'V';
     ones -= 5;
+
     while (ones > 0) {
       result += 'I';
-      ones--;
+      ones -= 1;
     }
   } else if (ones === 4) {
     result += 'IV';
   } else {
     while (ones > 0) {
       result += 'I';
-      ones--;
+      ones -= 1;
     }
   }
 
@@ -173,26 +177,57 @@ function convertNumberToString(numberStr) {
   let i = 0;
 
   while (i < numberStr.length) {
-    let ch = numberStr[i];
+    const ch = numberStr[i];
     let word = '';
-    if (ch === '0') word = 'zero';
-    else if (ch === '1') word = 'one';
-    else if (ch === '2') word = 'two';
-    else if (ch === '3') word = 'three';
-    else if (ch === '4') word = 'four';
-    else if (ch === '5') word = 'five';
-    else if (ch === '6') word = 'six';
-    else if (ch === '7') word = 'seven';
-    else if (ch === '8') word = 'eight';
-    else if (ch === '9') word = 'nine';
-    else if (ch === '-') word = 'minus';
-    else if (ch === '.' || ch === ',') word = 'point';
+
+    switch (ch) {
+      case '0':
+        word = 'zero';
+        break;
+      case '1':
+        word = 'one';
+        break;
+      case '2':
+        word = 'two';
+        break;
+      case '3':
+        word = 'three';
+        break;
+      case '4':
+        word = 'four';
+        break;
+      case '5':
+        word = 'five';
+        break;
+      case '6':
+        word = 'six';
+        break;
+      case '7':
+        word = 'seven';
+        break;
+      case '8':
+        word = 'eight';
+        break;
+      case '9':
+        word = 'nine';
+        break;
+      case '-':
+        word = 'minus';
+        break;
+      case '.':
+      case ',':
+        word = 'point';
+        break;
+      default:
+        word = '';
+    }
+
     if (result !== '' && word !== '') {
       result += ' ';
     }
 
     result += word;
-    i++;
+    i += 1;
   }
 
   return result;
@@ -218,13 +253,12 @@ function isPalindrome(str) {
     if (str[left] !== str[right]) {
       return false;
     }
-    left++;
-    right--;
+    left += 1;
+    right -= 1;
   }
 
   return true;
 }
-
 
 /**
  * Finds the first occurrence of a letter in a string.
