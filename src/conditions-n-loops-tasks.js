@@ -455,8 +455,67 @@ function sortByAsc(/* arr */) {
  * @param {number} iterations - The number of iterations to perform the shuffle.
  * @return {string} The shuffled string.
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  if (iterations === 0 || str.length < 2) return str;
+  const n = str.length;
+  const iters = iterations;
+  const p = new Array(n);
+  let idx = 0;
+  while (idx < n) {
+    if (idx % 2 === 0) {
+      p[idx] = idx / 2;
+    } else {
+      p[idx] = Math.floor(n / 2) + Math.floor(idx / 2);
+    }
+    idx += 1;
+  }
+  let resultPerm = new Array(n);
+  idx = 0;
+  while (idx < n) {
+    resultPerm[idx] = idx;
+    idx += 1;
+  }
+  let pow = new Array(n);
+  idx = 0;
+  while (idx < n) {
+    pow[idx] = p[idx];
+    idx += 1;
+  }
+  let k = iters;
+  while (k > 0) {
+    if (k % 2 === 1) {
+      const newRes = new Array(n);
+      idx = 0;
+      while (idx < n) {
+        newRes[idx] = pow[resultPerm[idx]];
+        idx += 1;
+      }
+      resultPerm = newRes;
+    }
+    const newPow = new Array(n);
+    idx = 0;
+    while (idx < n) {
+      newPow[idx] = pow[pow[idx]];
+      idx += 1;
+    }
+    pow = newPow;
+    k = Math.floor(k / 2);
+  }
+  const outChars = new Array(n);
+  idx = 0;
+  while (idx < n) {
+    const dest = resultPerm[idx];
+    outChars[dest] = str[idx];
+    idx += 1;
+  }
+  let out = '';
+  idx = 0;
+  while (idx < n) {
+    out += outChars[idx] === undefined ? '' : outChars[idx];
+    idx += 1;
+  }
+
+  return out;
 }
 
 /**
@@ -477,8 +536,48 @@ function shuffleChar(/* str, iterations */) {
  * 321321   => 322113
  *
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  if (number < 10) return number;
+  let n = number;
+  const digits = [];
+  while (n > 0) {
+    digits.push(n % 10);
+    n = Math.floor(n / 10);
+  }
+  digits.reverse();
+  let i = digits.length - 2;
+  while (i >= 0 && digits[i] >= digits[i + 1]) {
+    i -= 1;
+  }
+
+  if (i < 0) {
+    return number;
+  }
+  let j = digits.length - 1;
+  while (digits[j] <= digits[i]) {
+    j -= 1;
+  }
+  const swap = digits[i];
+  digits[i] = digits[j];
+  digits[j] = swap;
+  let left = i + 1;
+  let right = digits.length - 1;
+
+  while (left < right) {
+    const tmp = digits[left];
+    digits[left] = digits[right];
+    digits[right] = tmp;
+    left += 1;
+    right -= 1;
+  }
+  let result = 0;
+  let k = 0;
+
+  while (k < digits.length) {
+    result = result * 10 + digits[k];
+    k += 1;
+  }
+  return result;
 }
 
 module.exports = {
